@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Maintenance.Client.Database;
 using Maintenance.Client.Library;
 
 namespace Maintenance.Client.Controllers
@@ -13,7 +14,7 @@ namespace Maintenance.Client.Controllers
         public ClientClass Client { get; set; }
 
         // переменная для эмуляции БД
-        // TODO:: тут поставить stub для получения данных из сервера
+        public Stub Stub { get; set; }
 
         // переменная для работы с формой
         public MainForm Form { get; private set; }
@@ -21,19 +22,19 @@ namespace Maintenance.Client.Controllers
         // конструктор
         public App(MainForm form) {
             Client = new ClientClass();
+            Stub = new Stub();
             Form = form;
         } // App
-
+        
         /// <summary>
         /// отправить дневной отчет
         /// </summary>
         public void SendDailyRequest() {
             // получение данных от БД, передача в конвертер и отправка на сервер
-            // TODO:: заменить на нормальные данные
-            Client.SendMessage(RequestClass.CreateDailyRequest("daily"));
+            string reply = Client.SendMessage(RequestClass.CreateDailyRequest(Stub.DailyReport()));
 
-            // TODO:: передача данных на контроль отображения ответа
-
+            // вывод ответа сервера в текстбокс
+            Form.txbMessage.Text += reply;
         } // SendDailyRequest
 
         /// <summary>
@@ -41,11 +42,10 @@ namespace Maintenance.Client.Controllers
         /// </summary>
         public void SendStuffRequest() {
             // получение данных от БД, передача в конвертер и отправка на сервер
-            // TODO:: заменить на нормальные данные
-            Client.SendMessage(RequestClass.CreateStuffRequest("stuff_data"));
+            string reply = Client.SendMessage(RequestClass.CreateStuffRequest(Stub.WorkersReport()));
 
-            // TODO:: передача данных на контроль отображения ответа
-
+            // вывод ответа сервера в текстбокс
+            Form.txbMessage.Text += reply;
         } // SendStuffRequest
 
         /// <summary>
