@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -59,16 +60,29 @@ namespace Maintenance.Client.Library
 
                 // получение потока ввода/вывода для работы с сетью
                 using (NetworkStream networkStream = client.GetStream()) {
-                    // формирование байтов для запроса на сервер
-                    byte[] data = Encoding.UTF8.GetBytes(request);
-                    // передача запроса серверу
-                    networkStream.Write(data, 0, data.Length);
 
-                    // чтение ответа от сервера
-                    data = new byte[1536];
-                    int bytes = networkStream.Read(data, 0, data.Length);
-                    response = Encoding.UTF8.GetString(data, 0, bytes);
-                } // NetworkStream
+                    // запись запроса в сетевой поток при помощи бинарного потока
+                    using (BinaryWriter bwr = new BinaryWriter(networkStream)) {
+
+                        string[] buf = request.Split('\n'); // разбиение запроса на строки
+                        string name = buf[0]; // получение названия запроса
+                        string size = buf[1]; // получение размера отчета
+
+                        // вырезать из запроса строки name и size,
+                        // тем самым оставив голый отчет
+                        request = request.Substring(name.Length + 1);
+                        request = request.Substring(size.Length + 1);
+
+                        bwr.Write(name);
+                        bwr.Write(size);
+                        bwr.Write(request);
+
+                        // чтение ответа от сервера
+                        using (BinaryReader brd = new BinaryReader(networkStream))
+                            response = brd.ReadString();
+
+                    }//BinaryWriter
+                }// NetworkStream
             } // TcpClient
 
             return response;

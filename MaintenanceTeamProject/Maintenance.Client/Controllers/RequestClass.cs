@@ -14,7 +14,7 @@ namespace Maintenance.Client.Controllers
         /// <returns>запрос который должен отправится на сервер</returns>
         public static string CreateDailyRequest(string data) =>
             $"@@@daily_request\r\n" +
-            $"size: {Encoding.UTF8.GetBytes(data).Length}\r\n" +
+            $"{Encoding.UTF8.GetBytes(data).Length}\r\n" +
             $"{data}";
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Maintenance.Client.Controllers
         /// <returns>запрос который должен отправится на сервер</returns>
         public static string CreateStuffRequest(string data) =>
             $"@@@stuff_request\r\n" +
-            $"size: {Encoding.UTF8.GetBytes(data).Length}\r\n" +
+            $"{Encoding.UTF8.GetBytes(data).Length}\r\n" +
             $"{data}";
     } // RequestClass
 }

@@ -36,29 +36,46 @@ namespace Maintenance.Server
                     Console.WriteLine("\n\tTCP Сервер ожидает запросы...");
 
                     // блокирующий вызов, до соединения с клиентом
-                    using (TcpClient client = server.AcceptTcpClient())
-                    {
+                    using (TcpClient client = server.AcceptTcpClient()) {
+
                         Console.WriteLine("Есть новое подключение");
 
                         // получить сетевой поток, читаем запрос клиента
-                        NetworkStream network = client.GetStream();
-                        byte[] data = new byte[1536];
-                        int bytes = network.Read(data, 0, 1536);
-                        string request = Encoding.UTF8.GetString(data, 0, bytes);
-                        Console.WriteLine($"Клиент: {request}");
+                        using (NetworkStream network = client.GetStream()) {
 
-                        if (request == "download")
-                            Upload(network);
-                        else
-                        {
-                            // пишем ответ сервера Клиенту в сетевой поток
-                            string response = $"Привет, Клиент. Ты прислал \"{request}\"";
-                            data = Encoding.UTF8.GetBytes(response);
-                            network.Write(data, 0, data.Length);
-                        }
+                            // чтение запроса при помощи бинарного потока
+                            using (BinaryReader brd = new BinaryReader(network)) {
+
+                                string name = brd.ReadString(); // название отчета
+
+                                // размер отчета в байтах без учета заголовков(название и размер)
+                                string size = brd.ReadString();
+                                int length = int.Parse(size);
+
+                                string data = brd.ReadString(); // отчет 
+
+                                Console.WriteLine($"Отчет: {name}");
+                                Console.WriteLine($"Размер: {size}");
+                                Console.WriteLine($"{data}");
+
+                                if (name == "download")
+                                    Upload(network);
+                                else {
+                                    // пишем ответ сервера Клиенту в сетевой поток
+                                    string response = $"Привет, Клиент.\r\n" +
+                                                      $"Ты прислал \"{name}\"\r\n" +
+                                                      $"{DateTime.Now}\r\n" +
+                                                      $"——————————————————————\r\n\r\n";
+
+                                    using (BinaryWriter bwr = new BinaryWriter(network))
+                                        bwr.Write(response);
+                                }//else
+
+                            }// BinaryReader
+                        }// NetworkStream
 
                         Console.WriteLine("Ответ клиенту отправлен");
-                        network.Close();
+
                     } // using -- вызов Close() для клиента  
                 } // while
             } // try
