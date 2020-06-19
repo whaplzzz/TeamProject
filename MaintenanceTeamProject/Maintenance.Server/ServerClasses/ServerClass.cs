@@ -77,8 +77,8 @@ namespace Maintenance.Server.ServerClasses
                             {
                                 case "@@@daily_request":
 
-                                    // название и размер
-                                    string name1 = br.ReadString();
+                                    // размер
+                                  
                                     var size1 = br.ReadInt32();
                                     
                                     // сам отчёт
@@ -101,8 +101,8 @@ namespace Maintenance.Server.ServerClasses
                                         
                                 
                                 case "@@@stuff_request":
-                                    // название и размер
-                                    string names = br.ReadString();
+                                    // размер
+                                    
                                     var sizes = br.ReadInt32();
 
                                     // сам отчёт
