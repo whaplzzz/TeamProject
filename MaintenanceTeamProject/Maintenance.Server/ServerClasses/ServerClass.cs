@@ -81,14 +81,14 @@ namespace Maintenance.Server.ServerClasses
                                     
                                     var size1 = Int32.Parse(br.ReadString());
                                     
-                                    string data = br.ReadString(); 
+                                    string data1 = br.ReadString(); 
                                     Console.WriteLine("Парсинг прошёл успешно\n");
 
                                     // пишем ответ сервера Сервису в сетевой поток
-                                    byte[] dat = new byte[1536];
-                                    string responses = $"Server: Данные успешно получены\n";
-                                    dat = Encoding.UTF8.GetBytes(responses);
-                                    network.Write(dat, 0, dat.Length);
+                                    byte[] dat1 = new byte[1536];
+                                    string response1 = $"Server: Данные успешно получены\n";
+                                    dat1 = Encoding.UTF8.GetBytes(response1);
+                                    network.Write(dat1, 0, dat1.Length);
                                     Console.WriteLine("Ответ сервису отправлен\n");
 
                                     network.Close();
@@ -100,15 +100,15 @@ namespace Maintenance.Server.ServerClasses
                                     // размер
                                     
                                     var size2 = Int32.Parse(br.ReadString());
-                                    string data = br.ReadString(); 
+                                    string data2 = br.ReadString(); 
                                     Console.WriteLine("Парсинг прошёл успешно\n");
 
 
                                     // пишем ответ сервера Сервису в сетевой поток
-                                    byte[] dat = new byte[1536];
-                                    string responses = $"Server: Данные успешно получены\n";
-                                    dat = Encoding.UTF8.GetBytes(responses);
-                                    network.Write(dat, 0, dat.Length);
+                                    byte[] dat2 = new byte[1536];
+                                    string response2 = $"Server: Данные успешно получены\n";
+                                    dat2 = Encoding.UTF8.GetBytes(response2);
+                                    network.Write(dat2, 0, dat2.Length);
                                     Console.WriteLine("Ответ сервису отправлен\n");
 
                                     network.Close();
@@ -116,11 +116,11 @@ namespace Maintenance.Server.ServerClasses
                                 break;
 
                                 default:
-                                    byte[] datad = new byte[1536];
+                                    byte[] dat3 = new byte[1536];
                                     // пишем ответ сервера Сервису в сетевой поток
                                     string response = $"Server: Ошибка парсинга данных\n";
                                     datad = Encoding.UTF8.GetBytes(response);
-                                    network.Write(datad, 0, datad.Length);
+                                    network.Write(dat3, 0, dat3.Length);
                                     Console.WriteLine("Ответ сервису отправлен\n");
                                     network.Close();
                                 break;
@@ -134,8 +134,8 @@ namespace Maintenance.Server.ServerClasses
                         // сообщение клиенту
                         byte[] datad = new byte[1536];
                         // пишем ответ сервера Сервису в сетевой поток
-                        string response = $"Server: не удалось получить данные\n";
-                        datad = Encoding.UTF8.GetBytes(response);
+                        string resp = $"Server: не удалось получить данные\n";
+                        datad = Encoding.UTF8.GetBytes(resp);
                         network.Write(datad, 0, datad.Length);
 
                         Console.ForegroundColor = ConsoleColor.Red;
