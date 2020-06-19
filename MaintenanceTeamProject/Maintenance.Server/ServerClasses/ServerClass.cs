@@ -1,4 +1,4 @@
-﻿using Maintenance.Client.Controllers.Model;
+using Maintenance.Client.Controllers.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -77,8 +77,8 @@ namespace Maintenance.Server.ServerClasses
                             {
                                 case "@@@daily_request":
 
-                                    // размер
-                                  
+                                    // название и размер
+                                    
                                     var size1 = br.ReadInt32();
                                     
                                     // сам отчёт
@@ -88,20 +88,23 @@ namespace Maintenance.Server.ServerClasses
 
 
                                     //Console.WriteLine($"Сервис: {requests}");
-                                    Console.WriteLine("Парсинг прошёл успешно");
+                                    Console.WriteLine("Парсинг прошёл успешно\n");
 
                                     // пишем ответ сервера Сервису в сетевой поток
                                     byte[] data1 = new byte[1536];
                                     
-                                    string responsess = $"Server: Данные успешно получены";
+                                    string responsess = $"Server: Данные успешно получены\n";
                                     data1 = Encoding.UTF8.GetBytes(responsess);
                                     network.Write(data1, 0, data1.Length);
-                                    Console.WriteLine("Ответ сервису отправлен");
-                                    break; 
+                                    Console.WriteLine("Ответ сервису отправлен\n");
+
+                                    network.Close();
+
+                                break; 
                                         
                                 
                                 case "@@@stuff_request":
-                                    // размер
+                                    // название и размер
                                     
                                     var sizes = br.ReadInt32();
 
@@ -120,34 +123,35 @@ namespace Maintenance.Server.ServerClasses
 
 
                                     //Console.WriteLine($"Сервис: {requestss}");
-                                    Console.WriteLine("Парсинг прошёл успешно");
+                                    Console.WriteLine("Парсинг прошёл успешно\n");
 
 
                                     // пишем ответ сервера Сервису в сетевой поток
                                     byte[] dat = new byte[1536];
-                                    string responses = $"Server: Данные успешно получены";
+                                    string responses = $"Server: Данные успешно получены\n";
                                     dat = Encoding.UTF8.GetBytes(responses);
                                     network.Write(dat, 0, dat.Length);
-                                    Console.WriteLine("Ответ сервису отправлен");
+                                    Console.WriteLine("Ответ сервису отправлен\n");
 
+                                    network.Close();
+                                //Stuff _stuff;
+                                //using (MemoryStream ms = new MemoryStream())
+                                //_stuff = (Stuff) new BinaryFormatter().Deserialize(br.BaseStream);
 
-                                    //Stuff _stuff;
-                                    //using (MemoryStream ms = new MemoryStream())
-                                    //_stuff = (Stuff) new BinaryFormatter().Deserialize(br.BaseStream);
-
-                                    break;
+                                break;
 
                                 default:
                                     byte[] datad = new byte[1536];
                                     // пишем ответ сервера Сервису в сетевой поток
-                                    string response = $"Server: Ошибка парсинга данных";
+                                    string response = $"Server: Ошибка парсинга данных\n";
                                     datad = Encoding.UTF8.GetBytes(response);
                                     network.Write(datad, 0, datad.Length);
-                                    Console.WriteLine("Ответ сервису отправлен");
-
-                                    break;
+                                    Console.WriteLine("Ответ сервису отправлен\n");
+                                    network.Close();
+                                break;
                             }
 
+                                
                     } // try
 
                     catch (Exception ex)
@@ -155,20 +159,21 @@ namespace Maintenance.Server.ServerClasses
                         // сообщение клиенту
                         byte[] datad = new byte[1536];
                         // пишем ответ сервера Сервису в сетевой поток
-                        string response = $"Server: не удалось получить данные";
+                        string response = $"Server: не удалось получить данные\n";
                         datad = Encoding.UTF8.GetBytes(response);
                         network.Write(datad, 0, datad.Length);
 
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"\n\n{ex.Message}\n");
                         Console.ForegroundColor = ConsoleColor.Gray;
+                        network.Close();
 
                     } // catch
 
 
-                    network.Close();
-                        
-                       
+                    
+
+
                 } // while
             } // try
 
