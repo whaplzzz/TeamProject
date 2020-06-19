@@ -77,25 +77,18 @@ namespace Maintenance.Server.ServerClasses
                             {
                                 case "@@@daily_request":
 
-                                    // название и размер
+                                    //размер
                                     
-                                    var size1 = br.ReadInt32();
+                                    var size1 = Int32.Parse(br.ReadString());
                                     
-                                    // сам отчёт
-                                    byte[] data = new byte[size1];
-                                    int byte1 = br.Read(data, 0, size1);
-                                    string requests = Encoding.UTF8.GetString(data, 0, byte1);
-
-
-                                    //Console.WriteLine($"Сервис: {requests}");
+                                    string data = br.ReadString(); 
                                     Console.WriteLine("Парсинг прошёл успешно\n");
 
                                     // пишем ответ сервера Сервису в сетевой поток
-                                    byte[] data1 = new byte[1536];
-                                    
-                                    string responsess = $"Server: Данные успешно получены\n";
-                                    data1 = Encoding.UTF8.GetBytes(responsess);
-                                    network.Write(data1, 0, data1.Length);
+                                    byte[] dat = new byte[1536];
+                                    string responses = $"Server: Данные успешно получены\n";
+                                    dat = Encoding.UTF8.GetBytes(responses);
+                                    network.Write(dat, 0, dat.Length);
                                     Console.WriteLine("Ответ сервису отправлен\n");
 
                                     network.Close();
@@ -104,25 +97,10 @@ namespace Maintenance.Server.ServerClasses
                                         
                                 
                                 case "@@@stuff_request":
-                                    // название и размер
+                                    // размер
                                     
-                                    var sizes = br.ReadInt32();
-
-                                    // сам отчёт
-                                    byte[] datas = new byte[1536];
-                                    int bytess = network.Read(datas, 0, 1536);
-                                    string requestss = Encoding.UTF8.GetString(datas, 0, bytess);
-
-
-
-                                    //List<Worker> _stuff = new List<Worker>();
-                                    ////Worker st;
-                                    //////using (MemoryStream ms = new MemoryStream())
-                                    //////_stuff.Add(s => (Worker)new BinaryFormatter().Deserialize(br.BaseStream));
-                                    //_stuff = (List<Worker>) new BinaryFormatter().Deserialize(br.BaseStream);
-
-
-                                    //Console.WriteLine($"Сервис: {requestss}");
+                                    var size2 = Int32.Parse(br.ReadString());
+                                    string data = br.ReadString(); 
                                     Console.WriteLine("Парсинг прошёл успешно\n");
 
 
@@ -134,10 +112,7 @@ namespace Maintenance.Server.ServerClasses
                                     Console.WriteLine("Ответ сервису отправлен\n");
 
                                     network.Close();
-                                //Stuff _stuff;
-                                //using (MemoryStream ms = new MemoryStream())
-                                //_stuff = (Stuff) new BinaryFormatter().Deserialize(br.BaseStream);
-
+                              
                                 break;
 
                                 default:
@@ -170,10 +145,6 @@ namespace Maintenance.Server.ServerClasses
 
                     } // catch
 
-
-                    
-
-
                 } // while
             } // try
 
@@ -190,10 +161,6 @@ namespace Maintenance.Server.ServerClasses
             } // finally
         }
 
-
-
-    }//ServerWork
-
-        
+    }//ServerWork  
     
 }
